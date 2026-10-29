@@ -121,8 +121,8 @@ td.w{white-space:normal;min-width:180px}td.r,th.r{text-align:right}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 // ====== PEGA AQUÍ TUS DATOS (Supabase > Project Settings > API). Usa la clave "anon"/publishable, NUNCA la service_role ======
-const SUPABASE_URL = 'PEGA_AQUI_TU_PROJECT_URL';
-const SUPABASE_KEY = 'PEGA_AQUI_TU_CLAVE_ANON';
+const SUPABASE_URL = 'https://turin.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlYXB1dHBpeXJ2c2JtbnR4enZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyMTA1MzgsImV4cCI6MjEwODc4NjUzOH0.1eLEkk2UC0eB3V6jbczLe1hNB4sL_bdvR5ti_cGCZaQ';
 // ==========================================================================================================================
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const $ = s => document.querySelector(s);
