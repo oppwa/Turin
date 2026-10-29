@@ -175,7 +175,23 @@ const entrar = guard(async () => {
   await cargar(); ir('venta');
   if (r.turno_nuevo) pedirApertura();
 });
-(async () => { const { data } = await db.auth.getSession(); if (data.session) entrar(); })();
+// --- DETECTAR SI VIENE DE UN CORREO DE RECUPERACIÓN ---
+(async () => { 
+  const { data } = await db.auth.getSession(); 
+  
+  if (data.session) { 
+    entrar(); 
+  } else {
+    const hash = window.location.hash;
+    const query = window.location.search;
+    
+    if (hash.includes('access_token') || query.includes('code=')) {
+      $('#login').classList.add('hide');
+      $('#cambio').classList.remove('hide');
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }
+})();
 
 async function cargar() {
   const [p, c, k, t] = await Promise.all([
