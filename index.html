@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Turin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1d1815;--paper:#f3f5f2;--card:#fff;--line:#e0e4de;--brand:#2f6b4f;--brand2:#245640;--amber:#e3a63a;--bad:#b3392c;--mut:#6f786f}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.4 'DM Sans',system-ui,sans-serif}
+h1,h2,h3,.brand{font-family:'Bricolage Grotesque',sans-serif;margin:0}
+.hide{display:none!important}
+button{font:inherit;cursor:pointer}input,select{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.btn{background:var(--brand);color:#fff;border:0;border-radius:10px;padding:12px 18px;font-weight:700}
+.btn:hover{background:var(--brand2)}.btn:disabled{opacity:.5}
+.btn.sec{background:#e9ece7;color:var(--ink)}.btn.bad{background:var(--bad)}.btn.sm{padding:7px 12px;font-size:13px}
+.center{min-height:100vh;display:grid;place-items:center;padding:20px}
+.box{background:var(--card);border-radius:18px;padding:28px;width:100%;max-width:380px;box-shadow:0 10px 40px #1d181514}
+.box label,.modal label{display:block;font-size:12px;font-weight:700;color:var(--mut);margin:12px 0 4px}
+.err{color:var(--bad);font-size:13px;margin-top:10px}
+header{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--ink);color:#fff;position:sticky;top:0;z-index:20}
+.brand{font-size:21px;margin-right:auto}
+.pill{background:#ffffff1f;border-radius:20px;padding:5px 12px;font-size:12px}
+.pill.on{background:#2f6b4f}.pill.off{background:#b3392c}
+nav{display:flex;gap:4px;padding:8px 16px;background:#fff;border-bottom:1px solid var(--line);overflow-x:auto}
+nav button{border:0;background:none;padding:9px 14px;border-radius:10px;font-weight:700;color:var(--mut);white-space:nowrap}
+nav button.on{background:var(--ink);color:#fff}
+main{padding:16px;max-width:1280px;margin:0 auto}
+.pos{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}
+.row{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.chip{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:8px 15px;font-weight:700;font-size:13px}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.chip.mesa{border-style:dashed}.chip.add{background:var(--amber);border-color:var(--amber);color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:10px;margin-top:10px}
+.tile{position:relative;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 12px 12px;min-height:96px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.tile::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;background:hsl(var(--h) 45% 52%)}
+.tile:active{transform:scale(.97)}
+.tile b{font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tile span{color:var(--brand);font-weight:700;margin-top:6px}
+.tile i{position:absolute;top:8px;right:8px;background:var(--ink);color:#fff;border-radius:12px;min-width:24px;text-align:center;font-size:12px;font-style:normal;padding:2px 7px}
+.cart{background:#fff;border-radius:16px;padding:16px;position:sticky;top:70px;border:1px solid var(--line)}
+.item{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line)}
+.item .n{flex:1;font-weight:500}.q{display:flex;align-items:center;gap:6px}
+.q button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:700}
+.tot{display:flex;justify-content:space-between;font:700 20px 'Bricolage Grotesque';margin:14px 0}
+.fab{display:none}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.stat small{color:var(--mut)}.stat b{display:block;font:700 22px 'Bricolage Grotesque'}
+.stat.ef{border-left:5px solid #3a8a5f}.stat.ya{border-left:5px solid #7b3fa0}.stat.pl{border-left:5px solid #1f8fb0}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{color:var(--mut);font-size:12px}
+td.w{white-space:normal;min-width:180px}td.r,th.r{text-align:right}
+.tag{background:var(--amber);border-radius:8px;padding:1px 7px;font-size:11px;font-weight:700}
+.low td{color:var(--bad);font-weight:700}
+.f{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.f>div{flex:1;min-width:130px}
+.modal{position:fixed;inset:0;background:#1d181580;display:grid;place-items:center;padding:16px;z-index:50}
+.modal>div{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:400px;max-height:90vh;overflow:auto}
+.btns{display:flex;gap:10px;margin-top:18px}.btns>*{flex:1}
+.mesas{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.seg{display:flex;gap:6px}.seg button{flex:1}
+.ln{display:flex;justify-content:space-between;padding:3px 0}
+#toasts{position:fixed;top:12px;right:12px;z-index:99;display:grid;gap:8px}
+.toast{background:var(--ink);color:#fff;padding:11px 16px;border-radius:10px;max-width:300px}.toast.err{background:var(--bad)}.toast.ok{background:var(--brand)}
+.mut{color:var(--mut)}
+@media(max-width:900px){
+ .pos{grid-template-columns:1fr}
+ .cart{position:fixed;inset:auto 0 0 0;top:auto;border-radius:20px 20px 0 0;max-height:80vh;overflow:auto;transform:translateY(105%);transition:transform .22s;z-index:40;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+ .cart.open{transform:none}
+ .fab{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:30;justify-content:space-between;background:var(--brand);color:#fff;border:0;border-radius:14px;padding:15px 18px;font-weight:700;box-shadow:0 8px 24px #0004}
+ main{padding-bottom:90px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="login" class="center"><div class="box">
+  <h1>Turin</h1><p class="mut">Inicia sesión con tu correo</p>
+  <label for="em">Correo</label><input id="em" type="email" autocomplete="username">
+  <label for="pw">Contraseña</label><input id="pw" type="password" autocomplete="current-password">
+  <p id="lerr" class="err hide"></p>
+  <div class="btns"><button id="blogin" class="btn">Entrar</button></div>
+</div></div>
+
+<div id="cambio" class="center hide"><div class="box">
+  <h1>Crea tu contraseña</h1><p class="mut">Es tu primer ingreso. Elige una contraseña nueva de al menos 8 caracteres.</p>
+  <label for="n1">Contraseña nueva</label><input id="n1" type="password" autocomplete="new-password">
+  <label for="n2">Repítela</label><input id="n2" type="password" autocomplete="new-password">
+  <p id="cerr" class="err hide"></p>
+  <div class="btns"><button id="bcambio" class="btn">Guardar y entrar</button></div>
+</div></div>
+
+<div id="app" class="hide">
+  <header><span class="brand">Turin</span><span id="tbadge" class="pill off">Sin turno</span><span id="uname" class="pill"></span><button id="bout" class="pill" style="border:0;color:#fff">Salir</button></header>
+  <nav id="nav"></nav>
+  <main>
+    <section id="v-venta">
+      <div class="pos"><div>
+        <div class="row" id="coms"></div>
+        <input id="q" placeholder="Buscar producto…" style="margin:10px 0 8px">
+        <div class="row" id="cats"></div>
+        <div class="grid" id="grid"></div>
+      </div>
+      <aside class="cart" id="cart"></aside></div>
+      <button class="fab" id="fab"></button>
+    </section>
+    <section id="v-caja" class="hide"></section>
+    <section id="v-inv" class="hide"></section>
+    <section id="v-rep" class="hide"></section>
+    <section id="v-usu" class="hide"></section>
+  </main>
+</div>
+<div id="modal" class="modal hide"><div id="mbox"></div></div>
+<div id="toasts"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+// ====== PEGA AQUÍ TUS DATOS (Supabase > Project Settings > API). Usa la clave "anon"/publishable, NUNCA la service_role ======
+const SUPABASE_URL = 'PEGA_AQUI_TU_PROJECT_URL';
+const SUPABASE_KEY = 'PEGA_AQUI_TU_CLAVE_ANON';
+// ==========================================================================================================================
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = s => document.querySelector(s);
+const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => 'S/ ' + Number(n || 0).toFixed(2);
+const hue = c => [...(c || '')].reduce((a, x) => a + x.charCodeAt(0), 0) % 360;
+const lima = (d = new Date()) => d.toLocaleDateString('en-CA', { timeZone: 'America/Lima' });
+let U, turno, prods = [], coms = [], clis = [], activa = null, cat = 'Todas', vista = 'venta';
+
+function toast(m, t) { const e = document.createElement('div'); e.className = 'toast ' + (t || ''); e.textContent = m; $('#toasts').append(e); setTimeout(() => e.remove(), 3800); }
+async function rpc(fn, args) { const { data, error } = await db.rpc(fn, args); if (error) throw new Error(error.message); return data; }
+async function edge(body) {
+  const { data, error } = await db.functions.invoke('crear-usuario', { body });
+  if (error) { let m = error.message; try { m = (await error.context.json()).error || m; } catch (e) {} throw new Error(m); }
+  return data;
+}
+function modal(html) { $('#mbox').innerHTML = html; $('#modal').classList.remove('hide'); }
+function cerrar() { $('#modal').classList.add('hide'); }
+$('#modal').onclick = e => { if (e.target.id === 'modal') cerrar(); };
+const guard = f => async (...a) => { try { await f(...a); } catch (e) { toast(e.message, 'err'); } };
+
+// ---------- LOGIN ----------
+$('#blogin').onclick = async () => {
+  $('#lerr').classList.add('hide');
+  const { error } = await db.auth.signInWithPassword({ email: $('#em').value.trim(), password: $('#pw').value });
+  if (error) { $('#lerr').textContent = 'Correo o contraseña incorrectos.'; $('#lerr').classList.remove('hide'); return; }
+  $('#pw').value = ''; entrar();
+};
+$('#pw').onkeydown = e => { if (e.key === 'Enter') $('#blogin').click(); };
+$('#bcambio').onclick = async () => {
+  const a = $('#n1').value, b = $('#n2').value, er = $('#cerr'); er.classList.add('hide');
+  if (a.length < 8) { er.textContent = 'Usa al menos 8 caracteres.'; er.classList.remove('hide'); return; }
+  if (a !== b) { er.textContent = 'Las contraseñas no coinciden.'; er.classList.remove('hide'); return; }
+  const { error } = await db.auth.updateUser({ password: a });
+  if (error) { er.textContent = error.message; er.classList.remove('hide'); return; }
+  $('#n1').value = $('#n2').value = ''; entrar();
+};
+$('#bout').onclick = async () => { try { await rpc('al_salir'); } catch (e) {} await db.auth.signOut(); location.reload(); };
+
+const entrar = guard(async () => {
+  const r = await rpc('iniciar_app'); U = r.usuario;
+  $('#login').classList.add('hide');
+  if (r.debe_cambiar_clave) { $('#cambio').classList.remove('hide'); return; }
+  $('#cambio').classList.add('hide'); $('#app').classList.remove('hide');
+  $('#uname').textContent = U.nombre;
+  const tabs = [['venta', 'Venta'], ['caja', 'Caja'], ['inv', 'Inventario'], ['rep', 'Reportes']];
+  if (U.rol === 'Administrador') tabs.push(['usu', 'Usuarios']);
+  $('#nav').innerHTML = tabs.map(t => `<button data-v="${t[0]}">${t[1]}</button>`).join('');
+  $('#nav').onclick = e => { if (e.target.dataset.v) ir(e.target.dataset.v); };
+  await cargar(); ir('venta');
+  if (r.turno_nuevo) pedirApertura();
+});
+(async () => { const { data } = await db.auth.getSession(); if (data.session) entrar(); })();
+
+async function cargar() {
+  const [p, c, k, t] = await Promise.all([
+    db.from('productos').select('id,nombre,categoria,precio').eq('activo', true).order('nombre'),
+    db.from('comandas').select('id,nombre,items,cliente_id').eq('estado', 'Abierta').order('creada_en'),
+    db.from('clientes').select('id,nombre,dni,codigo,descuento').order('nombre'),
+    rpc('obtener_turno_abierto')]);
+  prods = p.data || []; coms = c.data || []; clis = k.data || []; turno = t;
+  if (!coms.find(x => x.id === activa?.id)) activa = null; else activa = coms.find(x => x.id === activa.id);
+  badge(); pintarVenta();
+}
+function badge() { const b = $('#tbadge'); b.textContent = turno ? 'Turno abierto' : 'Sin turno'; b.className = 'pill ' + (turno ? 'on' : 'off'); }
+function ir(v) {
+  vista = v;
+  ['venta', 'caja', 'inv', 'rep', 'usu'].forEach(x => $('#v-' + x).classList.toggle('hide', x !== v));
+  document.querySelectorAll('#nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  ({ caja: pintarCaja, inv: pintarInv, rep: pintarRep, usu: pintarUsu })[v]?.();
+}
+
+// ---------- VENTA ----------
+function pintarVenta() {
+  $('#coms').innerHTML = coms.map(c => `<button class="chip ${c.cliente_id ? '' : 'mesa'} ${c.id === activa?.id ? 'on' : ''}" data-c="${c.id}">${esc(c.nombre)} (${c.items.reduce((s, i) => s + i.cantidad, 0)})</button>`).join('') + '<button class="chip add" id="nueva">+ Nueva comanda</button>';
+  $('#coms').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'nueva') return nuevaComanda(); activa = coms.find(x => x.id === b.dataset.c); pintarVenta(); };
+  const cats = ['Todas', ...new Set(prods.map(p => p.categoria))];
+  $('#cats').innerHTML = cats.map(c => `<button class="chip ${c === cat ? 'on' : ''}" data-k="${esc(c)}">${esc(c)}</button>`).join('');
+  $('#cats').onclick = e => { if (e.target.dataset.k) { cat = e.target.dataset.k; pintarVenta(); } };
+  const q = $('#q').value.trim().toLowerCase();
+  const lista = prods.filter(p => (cat === 'Todas' || p.categoria === cat) && p.nombre.toLowerCase().includes(q));
+  $('#grid').innerHTML = lista.map(p => { const it = activa?.items.find(i => i.producto_id === p.id);
+    return `<button class="tile" style="--h:${hue(p.categoria)}" data-p="${p.id}">${it ? `<i>${it.cantidad}</i>` : ''}<b>${esc(p.nombre)}</b><span>${money(p.precio)}</span></button>`; }).join('') || '<p class="mut">No hay productos con ese filtro.</p>';
+  $('#grid').onclick = e => { const b = e.target.closest('.tile'); if (b) agregar(b.dataset.p); };
+  pintarCarrito();
+}
+$('#q').oninput = pintarVenta;
+const subtotal = c => c.items.reduce((s, i) => s + i.precio * i.cantidad, 0);
+function pintarCarrito() {
+  const c = activa, n = c ? c.items.reduce((s, i) => s + i.cantidad, 0) : 0;
+  $('#cart').innerHTML = !c ? '<p class="mut">Toca “+ Nueva comanda” para empezar.</p>' : `
+    <div style="display:flex;justify-content:space-between;align-items:center"><h3>${esc(c.nombre)}</h3><button class="btn sec sm" id="elim">Eliminar</button></div>
+    ${c.items.map(i => `<div class="item"><span class="n">${esc(i.nombre)}</span><span class="q"><button data-m="${i.producto_id}">−</button><b>${i.cantidad}</b><button data-a="${i.producto_id}">+</button></span><span>${money(i.precio * i.cantidad)}</span></div>`).join('') || '<p class="mut">Toca un producto para agregarlo.</p>'}
+    <div class="tot"><span>Total</span><span>${money(subtotal(c))}</span></div>
+    <button class="btn" style="width:100%" id="cobrar" ${n ? '' : 'disabled'}>Cobrar</button>`;
+  $('#fab').innerHTML = `<span>Ver comanda (${n})</span><span>${c ? money(subtotal(c)) : ''}</span>`;
+  $('#fab').style.display = ''; $('#fab').classList.toggle('hide', !c);
+  $('#cart').onclick = e => { const t = e.target;
+    if (t.dataset.a) cambiar(t.dataset.a, 1); if (t.dataset.m) cambiar(t.dataset.m, -1);
+    if (t.id === 'cobrar') cobrar(); if (t.id === 'elim') eliminar(); };
+}
+$('#fab').onclick = () => $('#cart').classList.toggle('open');
+let tm;
+function guardarItems() { clearTimeout(tm); const c = activa; tm = setTimeout(() => rpc('guardar_items_comanda', { p_id: c.id, p_items: c.items }).catch(e => toast(e.message, 'err')), 400); }
+function agregar(id) {
+  if (!activa) { toast('Primero crea o elige una comanda.', 'err'); return nuevaComanda(); }
+  const p = prods.find(x => x.id === id), it = activa.items.find(i => i.producto_id === id);
+  if (it) it.cantidad++; else activa.items.push({ producto_id: id, nombre: p.nombre, precio: Number(p.precio), cantidad: 1 });
+  guardarItems(); pintarVenta();
+}
+function cambiar(id, d) { const it = activa.items.find(i => i.producto_id === id); it.cantidad += d; if (it.cantidad <= 0) activa.items = activa.items.filter(i => i !== it); guardarItems(); pintarVenta(); }
+function eliminar() {
+  modal(`<h3>¿Eliminar ${esc(activa.nombre)}?</h3><p class="mut">Se pierden los productos agregados.</p><div class="btns"><button class="btn sec" onclick="cerrar()">Cancelar</button><button class="btn bad" id="si">Eliminar</button></div>`);
+  $('#si').onclick = guard(async () => { await rpc('eliminar_comanda', { p_id: activa.id }); cerrar(); activa = null; await cargar(); toast('Comanda eliminada.', 'ok'); });
+}
+function nuevaComanda() {
+  const ocup = coms.map(c => c.nombre);
+  modal(`<h3>Nueva comanda</h3><div class="seg" style="margin-top:10px"><button class="chip on" id="tm">Mesa</button><button class="chip" id="tc">Cliente</button></div>
+    <div id="pm"><div class="mesas">${[1, 2, 3, 4, 5, 6, 7, 8].map(n => `<button class="chip" data-n="${n}" ${ocup.includes('Mesa ' + n) ? 'disabled style="opacity:.35"' : ''}>Mesa ${n}</button>`).join('')}</div></div>
+    <div id="pc" class="hide"><input id="bc" placeholder="Buscar por nombre, DNI o código…" style="margin-top:10px"><div id="rc"></div></div>
+    <div class="btns"><button class="btn sec" onclick="cerrar()">Cancelar</button></div>`);
+  const crear = guard(async (tipo, mesa, cli) => { const r = await rpc('crear_comanda', { p_tipo: tipo, p_mesa: mesa, p_cliente: cli }); cerrar(); await cargar(); activa = coms.find(c => c.id === r.id); pintarVenta(); });
+  $('#tm').onclick = () => { $('#pm').classList.remove('hide'); $('#pc').classList.add('hide'); $('#tm').classList.add('on'); $('#tc').classList.remove('on'); };
+  $('#tc').onclick = () => { $('#pc').classList.remove('hide'); $('#pm').classList.add('hide'); $('#tc').classList.add('on'); $('#tm').classList.remove('on'); $('#bc').focus(); };
+  $('#pm').onclick = e => { if (e.target.dataset.n) crear('Mesa', Number(e.target.dataset.n), null); };
+  $('#bc').oninput = () => { const t = $('#bc').value.trim().toLowerCase(); if (t.length < 2) { $('#rc').innerHTML = ''; return; }
+    $('#rc').innerHTML = clis.filter(c => [c.nombre, c.dni, c.codigo].some(x => (x || '').toLowerCase().includes(t))).slice(0, 6).map(c => `<button class="chip" style="width:100%;margin-top:6px;text-align:left" data-i="${c.id}">${esc(c.nombre)} ${c.descuento > 0 ? `<span class="tag">-${c.descuento}%</span>` : ''}</button>`).join('') || '<p class="mut">Sin resultados.</p>'; };
+  $('#rc').onclick = e => { const b = e.target.closest('button'); if (b) crear('Cliente', null, b.dataset.i); };
+}
+
+// ---------- COBRO (pago normal o híbrido) ----------
+function cobrar() {
+  const c = activa, sub = subtotal(c), cl = clis.find(x => x.id === c.cliente_id), dc = cl ? Number(cl.descuento) : 0;
+  let pp = 0, codigo = '', hib = false;
+  const met = id => `<select id="${id}"><option>Efectivo</option><option>Yape</option><option>Plin</option></select>`;
+  modal(`<h3>Cobrar ${esc(c.nombre)}</h3>
+    <div class="ln"><span>Subtotal</span><span>${money(sub)}</span></div>
+    ${dc ? `<div class="ln"><span>Descuento cliente (${dc}%)</span><span>− ${money(Math.round(sub * dc) / 100)}</span></div>` : ''}
+    <div class="ln hide" id="lp"></div>
+    <div class="tot"><span>Total</span><span id="tt"></span></div>
+    <div style="display:flex;gap:8px"><input id="pr" placeholder="Código promocional"><button class="btn sec sm" id="ap">Aplicar</button></div>
+    <label>Forma de pago</label><div class="seg"><button class="chip on" id="gn">Un solo método</button><button class="chip" id="gh">Dividido (híbrido)</button></div>
+    <label>Método 1</label>${met('m1')}<label>Monto método 1</label><input id="a1" type="number" step="0.01" inputmode="decimal" readonly>
+    <div id="h2" class="hide"><label>Método 2</label>${met('m2')}<label>Monto método 2 (se calcula solo)</label><input id="a2" readonly></div>
+    <p id="perr" class="err hide"></p>
+    <div class="btns"><button class="btn sec" onclick="cerrar()">Cancelar</button><button class="btn" id="ok">Confirmar venta</button></div>`);
+  const total = () => { const d = Math.min(dc + pp, 100), md = Math.round(sub * d) / 100; return Math.round((sub - md) * 100) / 100; };
+  const calc = () => { const t = total(); $('#tt').textContent = money(t);
+    if (pp) { $('#lp').classList.remove('hide'); $('#lp').innerHTML = `<span>Código ${esc(codigo)} (${pp}%)</span><span>− ${money(Math.round(sub * pp) / 100)}</span>`; }
+    if (!hib) $('#a1').value = t.toFixed(2); else $('#a2').value = Math.max(t - (parseFloat($('#a1').value) || 0), 0).toFixed(2); };
+  calc();
+  $('#a1').oninput = calc;
+  $('#gn').onclick = () => { hib = false; $('#h2').classList.add('hide'); $('#a1').readOnly = true; $('#gn').classList.add('on'); $('#gh').classList.remove('on'); calc(); };
+  $('#gh').onclick = () => { hib = true; $('#h2').classList.remove('hide'); $('#a1').readOnly = false; $('#a1').value = ''; $('#m2').value = 'Yape'; $('#gh').classList.add('on'); $('#gn').classList.remove('on'); $('#a1').focus(); calc(); };
+  $('#ap').onclick = guard(async () => { const r = await rpc('validar_codigo_promo', { p_codigo: $('#pr').value });
+    if (r.valido) { pp = Number(r.porcentaje); codigo = $('#pr').value.trim().toUpperCase(); toast('Código aplicado.', 'ok'); } else { pp = 0; codigo = ''; $('#lp').classList.add('hide'); toast('Código no válido o inactivo.', 'err'); } calc(); });
+  $('#ok').onclick = guard(async () => {
+    const t = total(), a1 = parseFloat($('#a1').value) || 0, er = $('#perr'); er.classList.add('hide');
+    if (hib && (a1 <= 0 || a1 >= t || $('#m1').value === $('#m2').value)) { er.textContent = 'En pago dividido usa dos métodos distintos y un monto 1 entre 0 y el total.'; er.classList.remove('hide'); return; }
+    $('#ok').disabled = true;
+    const pago = { tipo: hib ? 'Hibrido' : 'Normal', metodo1: $('#m1').value, monto1: a1, metodo2: hib ? $('#m2').value : '', monto2: hib ? t - a1 : 0 };
+    try { const r = await rpc('registrar_venta', { p_carrito: c.items.map(i => ({ producto_id: i.producto_id, cantidad: i.cantidad })), p_pago: pago, p_comanda_id: c.id, p_codigo_promo: codigo });
+      cerrar(); $('#cart').classList.remove('open'); activa = null; await cargar(); toast(`Venta #${r.numero} registrada: ${money(r.total)}`, 'ok'); }
+    catch (e) { $('#ok').disabled = false; throw e; }
+  });
+}
+
+// ---------- CAJA ----------
+function pedirApertura() {
+  modal(`<h3>Tu turno se abrió</h3><p class="mut">¿Con cuánto efectivo empiezas? Puedes cambiarlo luego en Caja.</p><input id="mo" type="number" step="0.10" inputmode="decimal" placeholder="0.00"><div class="btns"><button class="btn sec" onclick="cerrar()">Ahora no</button><button class="btn" id="g">Guardar</button></div>`);
+  $('#g').onclick = guard(async () => { await rpc('establecer_monto_apertura', { p_monto: parseFloat($('#mo').value) || 0 }); cerrar(); turno = await rpc('obtener_turno_abierto'); badge(); if (vista === 'caja') pintarCaja(); toast('Monto guardado.', 'ok'); });
+}
+function pintarCaja() {
+  const el = $('#v-caja');
+  if (!turno) { el.innerHTML = '<div class="card"><h2>Sin turno abierto</h2><p class="mut">Se abre solo cuando creas una comanda o registras una venta.</p></div>'; return; }
+  const esp = Number(turno.montoApertura) + Number(turno.efectivoVentas);
+  el.innerHTML = `<div class="card" style="max-width:460px"><h2>Turno abierto</h2><p class="mut">Desde ${new Date(turno.fechaApertura).toLocaleString('es-PE', { timeZone: 'America/Lima' })}</p>
+    <div class="ln"><span>Monto de apertura</span><span>${money(turno.montoApertura)} <button class="btn sec sm" id="ea">Editar</button></span></div>
+    <div class="ln"><span>Ventas en efectivo</span><span>${money(turno.efectivoVentas)}</span></div>
+    <div class="ln"><b>Efectivo esperado en caja</b><b>${money(esp)}</b></div>
+    <label style="font-size:12px;font-weight:700;color:var(--mut)">Efectivo contado al cerrar (S/)</label><input id="cc" type="number" step="0.01" inputmode="decimal">
+    <div class="btns"><button class="btn" id="ct">Cerrar turno</button></div></div>`;
+  $('#ea').onclick = pedirApertura;
+  $('#ct').onclick = guard(async () => { const v = parseFloat($('#cc').value); if (isNaN(v)) throw new Error('Ingresa el efectivo contado.');
+    const r = await rpc('cerrar_turno', { p_monto_cierre: v }); turno = null; badge(); pintarCaja();
+    const d = Number(r.diferencia); modal(`<h3>Turno cerrado</h3><div class="ln"><span>Esperado</span><span>${money(r.esperado)}</span></div><div class="ln"><span>Contado</span><span>${money(r.contado)}</span></div><div class="ln"><b>Diferencia</b><b style="color:${d < 0 ? 'var(--bad)' : 'var(--brand)'}">${money(d)}</b></div><div class="btns"><button class="btn" onclick="cerrar()">Listo</button></div>`); });
+}
+
+// ---------- INVENTARIO ----------
+const pintarInv = guard(async () => {
+  const { data, error } = await db.from('insumos').select('id,nombre,unidad,stock_actual,stock_minimo'); if (error) throw error;
+  const adm = U.rol === 'Administrador', l = data.sort((a, b) => (a.stock_actual - a.stock_minimo) - (b.stock_actual - b.stock_minimo));
+  $('#v-inv').innerHTML = `<h2 style="margin-bottom:10px">Inventario</h2><div class="card tw"><table><tr><th>Insumo</th><th class="r">Stock</th><th>Unidad</th><th class="r">Mínimo</th>${adm ? '<th>Actualizar</th>' : ''}</tr>
+   ${l.map(i => `<tr class="${i.stock_actual < i.stock_minimo ? 'low' : ''}"><td>${esc(i.nombre)}</td><td class="r">${Number(i.stock_actual)}</td><td>${esc(i.unidad)}</td><td class="r">${Number(i.stock_minimo)}</td>${adm ? `<td><input id="s${i.id}" type="number" style="width:100px;padding:6px"> <button class="btn sm" data-i="${i.id}">Guardar</button></td>` : ''}</tr>`).join('')}</table></div>`;
+  $('#v-inv').onclick = guard(async e => { const id = e.target.dataset.i; if (!id) return; const v = parseFloat($('#s' + id).value); if (isNaN(v)) throw new Error('Ingresa una cantidad.');
+    await rpc('actualizar_stock_insumo', { p_id: id, p_nuevo: v }); toast('Stock actualizado.', 'ok'); pintarInv(); });
+});
+
+// ---------- REPORTES (los pagos híbridos muestran cuánto fue de cada medio) ----------
+function pintarRep() {
+  $('#v-rep').innerHTML = `<h2 style="margin-bottom:10px">Reporte de ventas</h2><div class="card"><div class="f"><div><label>Desde</label><input id="d1" type="date"></div><div><label>Hasta</label><input id="d2" type="date"></div><button class="btn" id="bg">Ver reporte</button></div>
+   <div class="row" style="margin-top:10px"><button class="chip" data-r="0">Hoy</button><button class="chip" data-r="6">Últimos 7 días</button><button class="chip" data-r="m">Este mes</button></div></div><div id="rr"></div>`;
+  const rango = r => { const h = new Date(); $('#d2').value = lima(h); $('#d1').value = r === 'm' ? lima(h).slice(0, 8) + '01' : lima(new Date(h - r * 864e5)); reporte(); };
+  $('#v-rep').onclick = e => { if (e.target.dataset.r) rango(e.target.dataset.r === 'm' ? 'm' : +e.target.dataset.r); if (e.target.id === 'bg') reporte(); };
+  rango(0);
+}
+const reporte = guard(async () => {
+  const r = await rpc('reporte_ventas', { p_desde: $('#d1').value || null, p_hasta: $('#d2').value || null }), s = r.resumen, d = x => Number(x) > 0 ? money(x) : '—';
+  $('#rr').innerHTML = `<div class="stats"><div class="stat"><small>Total vendido</small><b>${money(s.total)}</b></div><div class="stat ef"><small>Efectivo</small><b>${money(s.efectivo)}</b></div><div class="stat ya"><small>Yape</small><b>${money(s.yape)}</b></div><div class="stat pl"><small>Plin</small><b>${money(s.plin)}</b></div><div class="stat"><small>Ventas (híbridas)</small><b>${s.cantidad} (${s.hibridas})</b></div></div>
+   <div class="card tw"><h3>Por cajero</h3><table><tr><th>Cajero</th><th class="r">Ventas</th><th class="r">Efectivo</th><th class="r">Yape</th><th class="r">Plin</th><th class="r">Total</th></tr>${r.por_cajero.map(c => `<tr><td>${esc(c.cajero)}</td><td class="r">${c.ventas}</td><td class="r">${money(c.efectivo)}</td><td class="r">${money(c.yape)}</td><td class="r">${money(c.plin)}</td><td class="r"><b>${money(c.total)}</b></td></tr>`).join('') || '<tr><td colspan="6" class="mut">Sin ventas en este periodo.</td></tr>'}</table></div>
+   <div class="card tw"><h3>Detalle de ventas</h3><table><tr><th>N°</th><th>Fecha</th><th>Cajero</th><th>Productos</th><th class="r">Efectivo</th><th class="r">Yape</th><th class="r">Plin</th><th class="r">Total</th></tr>${r.ventas.map(v => `<tr><td>${v.numero}</td><td>${new Date(v.fecha).toLocaleString('es-PE', { timeZone: 'America/Lima', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</td><td>${esc(v.cajero)}</td><td class="w">${esc(v.productos)}</td><td class="r">${d(v.efectivo)}</td><td class="r">${d(v.yape)}</td><td class="r">${d(v.plin)}</td><td class="r"><b>${money(v.total)}</b> ${v.tipo_pago === 'Hibrido' ? '<span class="tag">Híbrido</span>' : ''}</td></tr>`).join('')}</table></div>
+   <div class="card tw"><h3>Productos más vendidos</h3><table><tr><th>Producto</th><th class="r">Cantidad</th><th class="r">Importe</th></tr>${r.por_producto.slice(0, 10).map(p => `<tr><td>${esc(p.producto)}</td><td class="r">${p.cantidad}</td><td class="r">${money(p.importe)}</td></tr>`).join('')}</table></div>`;
+});
+
+// ---------- USUARIOS (Administrador) ----------
+const pintarUsu = guard(async () => {
+  const { data, error } = await db.from('perfiles').select('id,nombre,email,rol,activo,debe_cambiar_clave').order('nombre'); if (error) throw error;
+  $('#v-usu').innerHTML = `<h2 style="margin-bottom:10px">Usuarios</h2><div class="card"><h3>Nuevo usuario</h3><div class="f"><div><label>Correo</label><input id="ue" type="email"></div><div><label>Nombre</label><input id="un"></div><div><label>Contraseña inicial (mín. 8)</label><input id="up"></div><div><label>Rol</label><select id="ur"><option>Cajero</option><option>Administrador</option></select></div><button class="btn" id="uc">Crear</button></div>
+   <p class="mut">La persona deberá cambiar esta contraseña al entrar por primera vez.</p></div>
+   <div class="card tw"><table><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th><th></th></tr>${data.map(u => `<tr><td>${esc(u.nombre)}</td><td>${esc(u.email)}</td><td>${u.rol}</td><td>${u.activo ? 'Activo' : '<span class="tag">Inactivo</span>'}${u.debe_cambiar_clave ? ' <span class="tag">Clave pendiente</span>' : ''}</td><td><button class="btn sec sm" data-t="${u.id}" data-a="${u.activo}">${u.activo ? 'Desactivar' : 'Activar'}</button> <button class="btn sec sm" data-r="${u.id}">Nueva clave</button></td></tr>`).join('')}</table></div>`;
+  $('#uc').onclick = guard(async () => { await edge({ accion: 'crear', email: $('#ue').value, nombre: $('#un').value, password: $('#up').value, rol: $('#ur').value }); toast('Usuario creado.', 'ok'); pintarUsu(); });
+  $('#v-usu').onclick = guard(async e => { const t = e.target;
+    if (t.dataset.t) { await rpc('actualizar_perfil', { p_id: t.dataset.t, p: { activo: t.dataset.a !== 'true' } }); pintarUsu(); }
+    if (t.dataset.r) { modal(`<h3>Nueva contraseña temporal</h3><input id="np" placeholder="Mínimo 8 caracteres"><div class="btns"><button class="btn sec" onclick="cerrar()">Cancelar</button><button class="btn" id="gp">Guardar</button></div>`);
+      $('#gp').onclick = guard(async () => { await edge({ accion: 'reset', id: t.dataset.r, password: $('#np').value }); cerrar(); toast('Listo: deberá cambiarla al entrar.', 'ok'); pintarUsu(); }); } });
+});
+</script>
+</body>
+</html>
